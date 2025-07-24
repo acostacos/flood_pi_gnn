@@ -13,7 +13,8 @@ from utils.file_utils import read_yaml_file, save_to_yaml_file
 from .hecras_data_retrieval import get_event_timesteps, get_cell_area, get_roughness,\
     get_cumulative_rainfall, get_water_level, get_water_volume, get_edge_direction_x,\
     get_edge_direction_y, get_face_length, get_velocity, get_face_flow
-from .shp_data_retrieval import get_edge_index, get_cell_elevation, get_edge_length, get_edge_slope
+from .shp_data_retrieval import get_edge_index, get_cell_elevation, get_node_edge_index,\
+    get_edge_length, get_edge_slope
 from .boundary_condition import BoundaryCondition
 from .dataset_normalizer import DatasetNormalizer
 
@@ -108,21 +109,25 @@ class FloodEventDataset(Dataset):
         self.log_func('Processing Flood Event Dataset...')
 
         self._set_event_properties()
-        edge_index = self._get_edge_index()
+        dir_edge_index = self._get_edge_index()
 
         static_nodes = self._get_static_node_features()
         dynamic_nodes = self._get_dynamic_node_features()
         static_edges = self._get_static_edge_features()
         dynamic_edges = self._get_dynamic_edge_features()
 
-        self.boundary_condition.create(edge_index, dynamic_nodes, dynamic_edges)
-        static_nodes, dynamic_nodes, static_edges, dynamic_edges, edge_index = self.boundary_condition.remove(
-            static_nodes, dynamic_nodes, static_edges, dynamic_edges, edge_index,
+        self.boundary_condition.create(dir_edge_index, dynamic_nodes, dynamic_edges)
+        static_nodes, dynamic_nodes, static_edges, dynamic_edges, dir_edge_index = self.boundary_condition.remove(
+            static_nodes, dynamic_nodes, static_edges, dynamic_edges, dir_edge_index,
+        )
+        static_nodes, dynamic_nodes, static_edges, dynamic_edges, dir_edge_index = self.boundary_condition.apply(
+            static_nodes, dynamic_nodes, static_edges, dynamic_edges, dir_edge_index,
         )
 
-        static_nodes, dynamic_nodes, static_edges, dynamic_edges, edge_index = self.boundary_condition.apply(
-            static_nodes, dynamic_nodes, static_edges, dynamic_edges, edge_index,
-        )
+        edge_index = dir_edge_index
+        # edge_index = self._to_undirected(dir_edge_index, static_edges, dynamic_edges)
+
+        node_edge_index, node_edge_attr = self._get_node_edge_index()
 
         # Global Mass Loss Features
         global_mass_info = self._get_global_mass_info(edge_index, dynamic_nodes, dynamic_edges)
@@ -440,6 +445,20 @@ class FloodEventDataset(Dataset):
             features.append(feature_data)
 
         return features
+
+    def _to_undirected(self, edge_index: ndarray, static_edges: ndarray, dynamic_edges: ndarray) -> Tuple[ndarray, ndarray, ndarray]:
+            row, col = edge_index[0], edge_index[1]
+            row, col = np.concat([row, col], axis=0), np.concat([col, row], axis=0)
+            edge_index = np.stack([row, col], axis=0)
+
+            static_edges = np.concat([static_edges, static_edges], axis=0)
+            dynamic_edges = np.concat([dynamic_edges, dynamic_edges], axis=1)
+
+            return edge_index, static_edges, dynamic_edges
+
+    def _get_node_edge_index(self) -> Tuple[ndarray, ndarray]:
+        node_edge_index, node_edge_attr = get_node_edge_index(self.raw_paths[0])
+        return node_edge_index, node_edge_attr
 
     def _get_global_mass_info(self,
                               edge_index: ndarray,

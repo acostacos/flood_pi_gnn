@@ -19,6 +19,10 @@ def save_to_yaml_file(filepath: str, data: dict):
     with open(filepath, 'w') as file:
         yaml.dump(data, file)
 
+def read_shp_file(filepath: str, columns: str | list) -> gpd.GeoDataFrame:
+    file = gpd.read_file(filepath)
+    return file[columns]
+
 def read_shp_file_as_numpy(filepath: str, columns: str | list) -> np.ndarray:
     file = gpd.read_file(filepath)
     np_data = file[columns].to_numpy()
