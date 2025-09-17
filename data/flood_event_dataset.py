@@ -21,7 +21,7 @@ from .dataset_normalizer import DatasetNormalizer
 
 class FloodEventDataset(Dataset):
     STATIC_NODE_FEATURES = ['position_x', 'position_y', 'area', 'roughness', 'elevation', 'aspect', 'curvature', 'flow_accumulation']
-    DYNAMIC_NODE_FEATURES = ['inflow', 'rainfall', 'water_volume'] # Not included: 'water_depth'
+    DYNAMIC_NODE_FEATURES = ['rainfall', 'water_volume'] # Not included: 'water_depth'
     STATIC_EDGE_FEATURES = ['relative_position_x', 'relative_position_y', 'face_length', 'length', 'slope']
     DYNAMIC_EDGE_FEATURES = ['face_flow'] # Not included: 'velocity'
     NODE_TARGET_FEATURE = 'water_volume'

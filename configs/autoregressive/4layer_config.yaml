@@ -31,9 +31,9 @@ dataset_parameters:
     event_stats_file: 'test_event_stats.yaml'
 
 training_parameters:
-  log_path             : 'hydrographnet_implementation/logs/train.log'                                # Path to save training logs
-  model_dir            : 'hydrographnet_implementation/model'                      # Directory to save trained models
-  stats_dir            : 'hydrographnet_implementation/train'                    # Directory to save training statistics
+  log_path             : 'num_gnn_layers/logs/4layer_train.log'                                # Path to save training logs
+  model_dir            : 'num_gnn_layers/model'                      # Directory to save trained models
+  stats_dir            : 'num_gnn_layers/train'                    # Directory to save training statistics
   checkpoint_path      : null                                # Path to load a pre-trained model; If None, no pre-trained model is loaded
   num_epochs           : 100                                # Number of epochs
   num_epochs_dyn_loss  : 0                                  # Number of epochs to determine loss scaling ratios dynamically; Usually 10 epochs is sufficient
@@ -41,11 +41,6 @@ training_parameters:
   # num_epochs_dyn_loss  : 10                                  # Number of epochs to determine loss scaling ratios dynamically; Usually 10 epochs is sufficient
   batch_size           : 32                                  # Batch size
   learning_rate        : 0.0001 # Auto 1                              # Learning rate
-  # learning_rate        : 0.00007   # Auto 2                             # Learning rate
-  # learning_rate        : 4.9e-5   # Auto 3                             # Learning rate
-  # learning_rate        : 3.43e-5   # Auto 4                             # Learning rate
-  # learning_rate        : 2.4e-5   # Auto 5-6                             # Learning rate
-  # learning_rate        : 1.18e-5   # Auto 7-8                             # Learning rate
   adam_weight_decay    : 0                                   # Weight decay
   gradient_clip_value : 0.5                                  # Gradient clipping value; If None, no gradient clipping is applied
   early_stopping_patience: 100                                 # Early stopping patience for autoregressive training
@@ -60,7 +55,7 @@ training_parameters:
 
 loss_func_parameters:
   node_loss: 'mse'                                         # Loes function for node features. Options: 'mse', 'mae', 'huber'
-  edge_loss: 'huber'                                         # Loss function for edge features. Options: 'mse', 'mae', 'huber'
+  edge_loss: 'mse'                                         # Loss function for edge features. Options: 'mse', 'mae', 'huber'
   edge_pred_loss_scale: 1.48e-1                              # Value used to scale edge prediction loss; This is used as an initial value when using dynamic loss scaling
   use_global_mass_loss: False                                # Use global mass conservation in loss function
   global_mass_loss_scale: 1.0e-5                             # Value used to scale global mass conservation loss; This is used as an initial value when using dynamic loss scaling
@@ -71,8 +66,8 @@ loss_func_parameters:
     delta: 0.15                                             # Delta parameter for Huber loss function.
 
 testing_parameters:
-  log_path: 'hydrographnet_implementation/logs/test.log'                                        # Path to save testing logs
-  output_dir: 'hydrographnet_implementation/test'                           # Directory to save testing results
+  log_path: 'num_gnn_layers/logs/4layer_test.log'                                        # Path to save testing logs
+  output_dir: 'num_gnn_layers/test'                           # Directory to save testing results
   rollout_start: 0                                      # Start timestep for the test rollout
   rollout_timesteps: null                               # Number of timesteps for the test rollout (30 seconds each)
 
@@ -105,15 +100,15 @@ model_parameters:
     decoder_activation: 'prelu'
 
   NodeEdgeGNN:
-    hidden_features: 32
-    num_layers: 2
-    activation: 'prelu'
+    hidden_features: 64
+    num_layers: 4
+    activation: 'relu'
     residual: True
-    mlp_layers: 2
-    encoder_layers: 2
-    encoder_activation: 'prelu'
-    decoder_layers: 2
-    decoder_activation: 'prelu'
+    mlp_layers: 3
+    encoder_layers: 3
+    encoder_activation: 'relu'
+    decoder_layers: 3
+    decoder_activation: 'relu'
 
   NodeEdgeGNNAttn:
     hidden_features: 16
