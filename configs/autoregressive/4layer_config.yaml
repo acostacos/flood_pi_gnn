@@ -103,7 +103,6 @@ model_parameters:
     hidden_features: 64
     num_layers: 4
     activation: 'relu'
-    residual: True
     mlp_layers: 3
     encoder_layers: 3
     encoder_activation: 'relu'
