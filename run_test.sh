@@ -7,10 +7,10 @@
 
 . venv/bin/activate
 
-srun python train.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.1_config.yaml' --model 'NodeEdgeGNN'
-srun python train.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.01_config.yaml' --model 'NodeEdgeGNN'
-srun python train.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.001_config.yaml' --model 'NodeEdgeGNN'
-srun python train.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.0001_config.yaml' --model 'NodeEdgeGNN'
+srun python test.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.1_config.yaml' --model 'NodeEdgeGNN' --model_path ''
+srun python test.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.01_config.yaml' --model 'NodeEdgeGNN' --model_path ''
+srun python test.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.001_config.yaml' --model 'NodeEdgeGNN' --model_path ''
+srun python test.py --config 'configs/global_local_weight_search/global_0.0001_and_local_0.0001_config.yaml' --model 'NodeEdgeGNN' --model_path ''
 
 # srun python test.py --config 'configs/config.yaml' --model 'GAT' --model_path ''
 # srun python test.py --config 'configs/config.yaml' --model 'GCN' --model_path ''
