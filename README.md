@@ -21,7 +21,7 @@ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https
 # Main library
 pip install torch_geometric
 
-# Other folders
+# Additional libraries
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.5.1+cu${CUDA}.html
 ```
 
@@ -34,10 +34,11 @@ pip install -r requirements.txt
 ### Data
 
 1. Request for access to the data.
-2. Place all of necessary files in the `data/datasets` folder. This is the default location but you may use other paths which must be defined in your `config.yaml` file.
+2. Place all of necessary files in the `data/datasets/raw` folder. This is the default location but you may use other paths which must be defined in your `config.yaml` file.
 3. Important files to have for dataset:
   - Node shape file (.shp)
   - Links shape file (.shp)
+  - DEM file (.tif)
   - HEC-RAS simulation files (.hdf)
   - Summary file for training events (.csv)
   - Summary file for testing events (.csv)

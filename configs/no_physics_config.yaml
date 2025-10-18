@@ -84,6 +84,16 @@ model_parameters:                                            # Model-specific pa
     decoder_layers: 0
     decoder_activation: 'relu'
 
+  EdgeGCN:
+    hidden_features: 64
+    num_layers: 3
+    activation: 'relu'
+    residual: False
+    encoder_layers: 0
+    encoder_activation: 'relu'
+    decoder_layers: 3
+    decoder_activation: 'relu'
+
   GAT:
     hidden_features: 64
     use_edge_features: False
@@ -99,6 +109,23 @@ model_parameters:                                            # Model-specific pa
     encoder_layers: 0
     encoder_activation: 'relu'
     decoder_layers: 0
+    decoder_activation: 'relu'
+
+  EdgeGAT:
+    hidden_features: 64
+    use_edge_features: True
+    num_layers: 3
+    activation: 'relu'
+    residual: False
+    num_heads: 1
+    dropout: 0.0
+    add_self_loops: True
+    negative_slope: 0.2
+    attn_bias: True
+    attn_residual: True
+    encoder_layers: 0
+    encoder_activation: 'relu'
+    decoder_layers: 3
     decoder_activation: 'relu'
 
   NodeEdgeGNN:

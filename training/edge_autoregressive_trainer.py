@@ -55,17 +55,17 @@ class EdgeAutoregressiveTrainer(BaseAutoregressiveTrainer):
 
             is_early_stopped = self.early_stopping(val_edge_rmse, self.model)
             is_max_exceeded = self.max_curriculum_epochs is not None and current_timestep_epochs >= self.max_curriculum_epochs
-            if (is_early_stopped or is_max_exceeded) and current_num_timesteps < self.total_num_timesteps:
-                self.training_stats.log(f'\tCurriculum learning for {current_num_timesteps} steps ended after {current_timestep_epochs} epochs.')
-                current_num_timesteps += 1
-                current_timestep_epochs = 0
-                self.early_stopping = EarlyStopping(patience=self.early_stopping.patience)
-                self.training_stats.log(f'\tIncreased current_num_timesteps to {current_num_timesteps} timesteps.')
-                self.lr_scheduler.step()
-                self.training_stats.log(f'\tDecayed learning rate to {self.lr_scheduler.get_last_lr()[0]:.4e}.')
-                continue
+            if is_early_stopped or is_max_exceeded:
+                if current_num_timesteps < self.total_num_timesteps:
+                    self.training_stats.log(f'\tCurriculum learning for {current_num_timesteps} steps ended after {current_timestep_epochs} epochs.')
+                    current_num_timesteps += 1
+                    current_timestep_epochs = 0
+                    self.early_stopping = EarlyStopping(patience=self.early_stopping.patience)
+                    self.training_stats.log(f'\tIncreased current_num_timesteps to {current_num_timesteps} timesteps.')
+                    self.lr_scheduler.step()
+                    self.training_stats.log(f'\tDecayed learning rate to {self.lr_scheduler.get_last_lr()[0]:.4e}.')
+                    continue
 
-            if is_early_stopped:
                 self.training_stats.log('Training completed due to early stopping.')
                 break
 

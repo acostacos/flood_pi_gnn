@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+from constants import EDGE_MODELS
 from typing import Tuple
 
 from .logger import Logger
@@ -18,7 +19,8 @@ def split_dataset_events(root_dir: str, dataset_summary_file: str, percent_valid
     summary_df = pd.read_csv(dataset_summary_path)
     assert len(summary_df) > 0, f'No data found in summary file: {dataset_summary_path}'
 
-    split_idx = len(summary_df) - int(len(summary_df) * percent_validation)
+    num_val_events = max(int(len(summary_df) * percent_validation), 1)
+    split_idx = len(summary_df) - num_val_events
 
     TEMP_DIR_NAME = 'train_val_split'
     create_temp_dirs(raw_dir_path, folder_name=TEMP_DIR_NAME)
@@ -38,7 +40,6 @@ def get_trainer_config(model_name: str, config: dict, logger: Logger = None) -> 
         if logger:
             logger.log(msg)
 
-    EDGE_MODELS = ['EdgeGNN']
     trainer_params = {}
 
     train_config = config['training_parameters']

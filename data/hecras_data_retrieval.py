@@ -100,3 +100,18 @@ def get_inflow(filepath: str, perimeter_name: str = 'Perimeter 1', dtype: np.dty
     property_path = f'Results.Unsteady.Output.Output Blocks.Base Output.Unsteady Time Series.2D Flow Areas.{perimeter_name}.Boundary Conditions.UP_BC - Flow per Face'
     data = read_hdf_file_as_numpy(filepath=filepath, property_path=property_path)
     return data.astype(dtype)
+
+def get_wl_vol_interp_points_for_cell(cell_idx: int, filepath: str, perimeter_name: str = 'Perimeter 1') -> np.ndarray:
+    info_property_path = f'Geometry.2D Flow Areas.{perimeter_name}.Cells Volume Elevation Info'
+    info_data = read_hdf_file_as_numpy(filepath=filepath, property_path=info_property_path)
+
+    values_property_path = f'Geometry.2D Flow Areas.{perimeter_name}.Cells Volume Elevation Values'
+    values_data = read_hdf_file_as_numpy(filepath=filepath, property_path=values_property_path)
+
+    assert cell_idx < info_data.shape[0], "Cell is not found in the data."
+    start_idx, count = info_data[cell_idx]
+    assert count > 1, "Cell has no elevation-volume points."
+    link_data = values_data[start_idx:start_idx+count]
+    water_level = link_data[:, 0]
+    volume = link_data[:, 1]
+    return water_level, volume

@@ -57,12 +57,12 @@ loss_func_parameters:
   node_loss_weight: 1.0                                      # Importance weight for node prediction loss. Applied after scaling.
   edge_pred_loss_scale: 3.00                                 # Value used to scale edge prediction loss; This is used as an initial value when using dynamic loss scaling
   edge_loss_weight: 0.4                                      # Importance weight for edge prediction loss. Applied after scaling.
-  use_global_mass_loss: True                                # Enable global mass conservation in loss function
-  global_mass_loss_scale: 1.40e-9                             # Value used to scale global mass conservation loss. This is used as an initial value when using dynamic loss scaling
-  global_mass_loss_weight: 0.1662                            # Importance weight for global mass conservation loss. Applied after scaling.
-  use_local_mass_loss: True                                 # Enable local mass conservation in loss function
-  local_mass_loss_scale: 1.19e-9                              # Value used to scale local mass conservation loss. This is used as an initial value when using dynamic loss scaling
-  local_mass_loss_weight: 0.0418                                # Importance weight for local mass conservation loss. Applied after scaling.
+  use_global_mass_loss: True                                 # Enable global mass conservation in loss function
+  global_mass_loss_scale: 1.40e-9                            # Value used to scale global mass conservation loss. This is used as an initial value when using dynamic loss scaling
+  global_mass_loss_weight: 0.01                              # Importance weight for global mass conservation loss. Applied after scaling.
+  use_local_mass_loss: True                                  # Enable local mass conservation in loss function
+  local_mass_loss_scale: 1.19e-9                             # Value used to scale local mass conservation loss. This is used as an initial value when using dynamic loss scaling
+  local_mass_loss_weight: 0.01                               # Importance weight for local mass conservation loss. Applied after scaling.
 
   huber:
     delta: 0.15                                               # Delta parameter for Huber loss function.

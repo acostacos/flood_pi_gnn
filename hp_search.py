@@ -6,6 +6,7 @@ import optuna
 import random
 
 from argparse import ArgumentParser, Namespace
+from constants import EDGE_MODELS
 from contextlib import redirect_stdout
 from optuna.visualization import plot_optimization_history, plot_slice, plot_pareto_front
 from pprint import pformat
@@ -74,7 +75,7 @@ def cross_validate(_config: Dict, cross_val_groups: List[str]) -> float | Tuple[
 
         if is_dual_model:
             tester = DualAutoregressiveTester(**tester_params)
-        elif model.__class__.__name__ in ['EdgeGNN']:
+        elif model.__class__.__name__ in EDGE_MODELS:
             tester = EdgeAutoregressiveTester(**tester_params)
         else:
             tester = NodeAutoregressiveTester(**tester_params)
