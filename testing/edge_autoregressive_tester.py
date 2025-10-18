@@ -53,7 +53,7 @@ class EdgeAutoregressiveTester(BaseTester):
 
                 edge_sliding_window = torch.concat((edge_sliding_window[:, 1:], edge_pred), dim=1)
 
-                label_edge = graph.y_edge
+                label_edge = graph.edge_attr[:, [self.end_edge_target_idx-1]] + graph.y_edge
                 if self.dataset.is_normalized:
                     edge_pred = self.dataset.normalizer.denormalize(self.dataset.EDGE_TARGET_FEATURE, edge_pred)
                     label_edge = self.dataset.normalizer.denormalize(self.dataset.EDGE_TARGET_FEATURE, label_edge)

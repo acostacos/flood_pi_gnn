@@ -5,6 +5,7 @@ import os
 import random
 
 from argparse import ArgumentParser, Namespace
+from constants import EDGE_MODELS
 from data import dataset_factory, FloodEventDataset
 from models import model_factory
 from testing import DualAutoregressiveTester, EdgeAutoregressiveTester, NodeAutoregressiveTester
@@ -58,7 +59,7 @@ def run_test(model: torch.nn.Module,
     is_dual_model = 'NodeEdgeGNN' in model.__class__.__name__
     if is_dual_model:
         tester = DualAutoregressiveTester(**tester_params)
-    elif model.__class__.__name__ in ['EdgeGNN']:
+    elif model.__class__.__name__ in EDGE_MODELS:
         tester = EdgeAutoregressiveTester(**tester_params)
     else:
         tester = NodeAutoregressiveTester(**tester_params)
@@ -86,6 +87,13 @@ def main():
             torch.manual_seed(args.seed)
             torch.cuda.manual_seed_all(args.seed)
             logger.log(f'Setting random seed to {args.seed}')
+
+            # Enable deterministic behavior for reproducibility
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False
+            torch.use_deterministic_algorithms(True, warn_only=True)
+            os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+            logger.log('Enabled deterministic mode for reproducibility')
 
         current_device = torch.cuda.get_device_name(args.device) if args.device != 'cpu' else 'CPU'
         logger.log(f'Using device: {current_device}')
