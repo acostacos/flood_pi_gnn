@@ -49,7 +49,7 @@ training_parameters:
     init_num_timesteps : 1                                   # Initial number of timesteps for autoregressive training
     total_num_timesteps: 6                                   # Total number of timesteps for autoregressive training
     max_curriculum_epochs: 100                               # Maximum number of curriculum steps
-    learning_rate_decay  : 0.7                               # Learning rate decay factor after each curriculum step
+    learning_rate_decay  : 0.9                               # Learning rate decay factor after each curriculum step
 
 loss_func_parameters:
   node_loss: 'mse'                                           # Loss function for node features. Options: 'mse', 'mae', 'huber'
