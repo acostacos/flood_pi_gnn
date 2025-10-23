@@ -88,13 +88,6 @@ def main():
             torch.cuda.manual_seed_all(args.seed)
             logger.log(f'Setting random seed to {args.seed}')
 
-            # Enable deterministic behavior for reproducibility
-            torch.backends.cudnn.deterministic = True
-            torch.backends.cudnn.benchmark = False
-            torch.use_deterministic_algorithms(True, warn_only=True)
-            os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
-            logger.log('Enabled deterministic mode for reproducibility')
-
         current_device = torch.cuda.get_device_name(args.device) if args.device != 'cpu' else 'CPU'
         logger.log(f'Using device: {current_device}')
 
