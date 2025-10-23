@@ -46,8 +46,9 @@ training_parameters:
 
   autoregressive:
     enabled            : True                                # Enable autoregressive training
-    init_num_timesteps : 1                                   # Initial number of timesteps for autoregressive training
+    init_num_timesteps : 2                                   # Initial number of timesteps for autoregressive training
     total_num_timesteps: 6                                   # Total number of timesteps for autoregressive training
+    timestep_increment : 2                                   # Number of timesteps to increase after each curriculum step
     max_curriculum_epochs: 100                               # Maximum number of curriculum steps
     learning_rate_decay  : 0.7                               # Learning rate decay factor after each curriculum step
 

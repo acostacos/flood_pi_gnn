@@ -9,6 +9,7 @@ class BaseAutoregressiveTrainer(BaseTrainer):
     def __init__(self,
                  init_num_timesteps: int = 1,
                  total_num_timesteps: int = 1,
+                 timestep_increment: int = 1,
                  learning_rate_decay: float = 0.7,
                  max_curriculum_epochs: Optional[int] = None,
                  *args,
@@ -16,6 +17,7 @@ class BaseAutoregressiveTrainer(BaseTrainer):
         super().__init__(*args, **kwargs)
         self.init_num_timesteps = init_num_timesteps
         self.total_num_timesteps = total_num_timesteps
+        self.timestep_increment = timestep_increment
         self.max_curriculum_epochs = max_curriculum_epochs
         self.lr_scheduler = StepLR(self.optimizer, step_size=1, gamma=learning_rate_decay)
 

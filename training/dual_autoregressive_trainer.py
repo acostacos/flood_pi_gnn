@@ -68,7 +68,7 @@ class DualAutoregressiveTrainer(NodeAutoregressiveTrainer, EdgeAutoregressiveTra
             if is_early_stopped or is_max_exceeded:
                 if current_num_timesteps < self.total_num_timesteps:
                     self.training_stats.log(f'\tCurriculum learning for {current_num_timesteps} steps ended after {current_timestep_epochs} epochs.')
-                    current_num_timesteps += 1
+                    current_num_timesteps += self.timestep_increment
                     current_timestep_epochs = 0
                     self.early_stopping = EarlyStopping(patience=self.early_stopping.patience)
                     self.training_stats.log(f'\tIncreased current_num_timesteps to {current_num_timesteps} timesteps.')

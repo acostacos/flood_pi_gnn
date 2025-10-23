@@ -101,13 +101,15 @@ def get_trainer_config(model_name: str, config: dict, logger: Logger = None) -> 
         total_num_timesteps = autoregressive_train_config['total_num_timesteps']
         learning_rate_decay = autoregressive_train_config['learning_rate_decay']
         max_curriculum_epochs = autoregressive_train_config['max_curriculum_epochs']
-        log(f'Using autoregressive training for {init_num_timesteps}/{total_num_timesteps} timesteps and curriculum learning with patience {early_stopping_patience}, max {max_curriculum_epochs} epochs and learning rate decay {learning_rate_decay}')
+        timestep_increment = autoregressive_train_config.get('timestep_increment', 1)
+        log(f'Using autoregressive training for {init_num_timesteps}/{total_num_timesteps} timesteps and curriculum learning with timestep increment {timestep_increment}, patience {early_stopping_patience}, max {max_curriculum_epochs} epochs and learning rate decay {learning_rate_decay}')
 
         trainer_params.update({
             'init_num_timesteps': init_num_timesteps,
             'total_num_timesteps': total_num_timesteps,
             'learning_rate_decay': learning_rate_decay,
             'max_curriculum_epochs': max_curriculum_epochs,
+            'timestep_increment': timestep_increment,
         })
 
     # Node/Edge prediction parameters
