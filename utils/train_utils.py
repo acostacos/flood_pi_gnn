@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+from constants import EDGE_MODELS
 from typing import Tuple
 
 from .logger import Logger
@@ -18,7 +19,8 @@ def split_dataset_events(root_dir: str, dataset_summary_file: str, percent_valid
     summary_df = pd.read_csv(dataset_summary_path)
     assert len(summary_df) > 0, f'No data found in summary file: {dataset_summary_path}'
 
-    split_idx = len(summary_df) - int(len(summary_df) * percent_validation)
+    num_val_events = max(int(len(summary_df) * percent_validation), 1)
+    split_idx = len(summary_df) - num_val_events
 
     TEMP_DIR_NAME = 'train_val_split'
     create_temp_dirs(raw_dir_path, folder_name=TEMP_DIR_NAME)
@@ -38,7 +40,6 @@ def get_trainer_config(model_name: str, config: dict, logger: Logger = None) -> 
         if logger:
             logger.log(msg)
 
-    EDGE_MODELS = ['EdgeGNN']
     trainer_params = {}
 
     train_config = config['training_parameters']
@@ -100,13 +101,15 @@ def get_trainer_config(model_name: str, config: dict, logger: Logger = None) -> 
         total_num_timesteps = autoregressive_train_config['total_num_timesteps']
         learning_rate_decay = autoregressive_train_config['learning_rate_decay']
         max_curriculum_epochs = autoregressive_train_config['max_curriculum_epochs']
-        log(f'Using autoregressive training for {init_num_timesteps}/{total_num_timesteps} timesteps and curriculum learning with patience {early_stopping_patience}, max {max_curriculum_epochs} epochs and learning rate decay {learning_rate_decay}')
+        timestep_increment = autoregressive_train_config.get('timestep_increment', 1)
+        log(f'Using autoregressive training for {init_num_timesteps}/{total_num_timesteps} timesteps and curriculum learning with timestep increment {timestep_increment}, patience {early_stopping_patience}, max {max_curriculum_epochs} epochs and learning rate decay {learning_rate_decay}')
 
         trainer_params.update({
             'init_num_timesteps': init_num_timesteps,
             'total_num_timesteps': total_num_timesteps,
             'learning_rate_decay': learning_rate_decay,
             'max_curriculum_epochs': max_curriculum_epochs,
+            'timestep_increment': timestep_increment,
         })
 
     # Node/Edge prediction parameters

@@ -80,7 +80,7 @@ class DualRegressionTester(BaseTester):
                                                            water_threshold=self.threshold_per_cell,
                                                            timestamp=graph.timestep if hasattr(graph, 'timestep') else None)
 
-                label_edge = graph.y_edge
+                label_edge = edge_attr[:, [self.end_edge_target_idx-1]] + graph.y_edge
                 if self.dataset.is_normalized:
                     edge_pred = self.dataset.normalizer.denormalize(self.dataset.EDGE_TARGET_FEATURE, edge_pred)
                     label_edge = self.dataset.normalizer.denormalize(self.dataset.EDGE_TARGET_FEATURE, label_edge)

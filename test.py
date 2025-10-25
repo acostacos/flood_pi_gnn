@@ -5,6 +5,7 @@ import os
 import random
 
 from argparse import ArgumentParser, Namespace
+from constants import EDGE_MODELS
 from data import dataset_factory, FloodEventDataset
 from models import model_factory
 from testing import DualAutoregressiveTester, EdgeAutoregressiveTester, NodeAutoregressiveTester
@@ -58,7 +59,7 @@ def run_test(model: torch.nn.Module,
     is_dual_model = 'NodeEdgeGNN' in model.__class__.__name__
     if is_dual_model:
         tester = DualAutoregressiveTester(**tester_params)
-    elif model.__class__.__name__ in ['EdgeGNN']:
+    elif model.__class__.__name__ in EDGE_MODELS:
         tester = EdgeAutoregressiveTester(**tester_params)
     else:
         tester = NodeAutoregressiveTester(**tester_params)
